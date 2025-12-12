@@ -1,0 +1,152 @@
+body {
+  margin: 0;
+  background-color: #0f0f0f;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  color: #fff;
+}
+
+/* Centered layout */
+.signup-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Box */
+.signup-box {
+  background-color: #121212;
+  border: 1px solid #262626;
+  border-radius: 8px;
+  padding: 40px;
+  width: 350px;
+  /* height:90vh; */
+  text-align: center;
+}
+
+/* Title */
+.signup-title {
+  font-family: "Brush Script MT", cursive;
+  font-size: 42px;
+  color: #fff;
+  margin-bottom: 15px;
+}
+
+/* Subtitle text */
+.signup-subtitle {
+  color: #ccc;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+/* Facebook button */
+.facebook-btn {
+  width: 100%;
+  background-color: #385185;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  padding: 10px;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+.facebook-btn:hover {
+  background-color: #314977;
+}
+
+/* OR divider */
+.or-line {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #999;
+  margin: 15px 0;
+  font-size: 12px;
+}
+
+.or-line::before,
+.or-line::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #333;
+  margin: 0 10px;
+}
+
+/* Inputs */
+form input {
+  width: 100%;
+  background-color: #1c1c1c;
+  border: 1px solid #333;
+  border-radius: 4px;
+  padding: 10px;
+  color: white;
+  margin-bottom: 10px;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+form input:focus {
+  border-color: #4f5bd5;
+}
+
+/* Error text */
+.error {
+  color: #f44336;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+/* Info text */
+.info-text {
+  font-size: 12px;
+  color: #aaa;
+  line-height: 1.4;
+  margin: 15px 0 10px;
+}
+
+/* Links */
+.link {
+  color: #4f5bd5;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+/* Terms text */
+.terms {
+  font-size: 12px;
+  color: #aaa;
+  line-height: 1.4;
+  margin-bottom: 15px;
+}
+
+/* Sign Up button */
+.signup-btn {
+  width: 100%;
+  background-color: #4f5bd5;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.signup-btn:hover {
+  background-color: #3f4bd8;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .signup-box {
+    width: 90%;
+    padding: 25px;
+  }
+}

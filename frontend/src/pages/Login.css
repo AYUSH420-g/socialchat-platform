@@ -1,0 +1,142 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  background-color: #0e0e10;
+  color: #fff;
+}
+
+.login-page-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.login-image-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #121212; 
+  overflow: hidden;
+}
+
+.login-image {
+  width: 65%;
+  height: 65vh;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 6%;
+  opacity: 70%;
+}
+
+.login-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #121212;
+  padding: 40px;
+}
+
+.login-box {
+  width: 100%;
+  max-width: 360px;
+  background-color: #121212;
+  padding: 35px 30px;
+  border-radius: 12px;
+  /* box-shadow: 0 0 0 1px #262626, 0 6px 15px rgba(0, 0, 0, 0.4); */
+}
+
+.login-title {
+  text-align: center;
+  font-size: 38px;
+  font-family: "Brush Script MT", cursive;
+  color: #ffffff;
+  margin-bottom: 30px;
+}
+
+/* === Input fields === */
+.login-box input {
+  width: 100%;
+  padding: 12px 10px;
+  margin-bottom: 12px;
+  background-color: #262626;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #fff;
+  outline: none;
+  font-size: 14px;
+  transition: border-color 0.3s;
+}
+
+.login-box input::placeholder {
+  color: #8e8e8e;
+}
+
+.login-box input:focus {
+  border-color: #4f5bd5;
+}
+
+/* === Button === */
+.login-box button {
+  width: 100%;
+  padding: 12px;
+  background-color: #4f5bd5;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.login-box button:hover {
+  background-color: #3f4bd8;
+}
+
+/* === Footer === */
+.login-footer {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #aaa;
+}
+
+.login-footer span {
+  color: #4f5bd5;
+  cursor: pointer;
+  transition: text-decoration 0.2s;
+}
+
+.login-footer span:hover {
+  text-decoration: underline;
+}
+
+/* === Responsive Design === */
+@media (max-width: 900px) {
+  .login-page-container {
+    flex-direction: column;
+  }
+
+  .login-image-container {
+    height: 40vh;
+  }
+
+  .login-image {
+    height: 40vh;
+  }
+
+  .login-container {
+    flex: none;
+    padding: 20px;
+    height: auto;
+  }
+
+  .login-box {
+    width: 100%;
+    max-width: 350px;
+  }
+}
