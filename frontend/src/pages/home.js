@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import './home.css';
+import "./home.css";
 
-function Home(){
-// const navigate = useNavigate();
-return(
-    <h1 className='home'>welcome to feed</h1>
-);
+function Home() {
+  const navigate = useNavigate();
+
+  return (
+    <div className="home-container">
+      <h1 className="home">Chat With Us</h1>
+
+      <button className="home-button"
+      onClick={() => navigate("/chat/:receiverId")}>
+        Chat
+      </button>
+    </div>
+  );
 }
 
 export default Home;

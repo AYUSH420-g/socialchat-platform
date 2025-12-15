@@ -21,7 +21,6 @@ function Login() {
       // SAVE TOKEN IN LOCAL STORAGE
       localStorage.setItem("token", res.data.token);
 
-      // SAVE USER DATA
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
       // REDIRECT TO HOME PAGE (YOU CAN CHANGE IT)

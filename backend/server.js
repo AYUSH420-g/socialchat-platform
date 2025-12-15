@@ -5,25 +5,23 @@ const cors = require('cors');
 
 const app = express();
 
-// MIDDLEWARES
 app.use(cors());
 app.use(express.json());
 
-// ROUTES
+const chatRoutes = require("./routes/chat");
+app.use("/api/chat", chatRoutes);
+
 const authRoutes = require('./routes/auth');
 app.use('/api/auth', authRoutes);
 
-// MONGO CONNECTION
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => console.log('MongoDB connected'))
-.catch(err => console.log('MongoDB error:', err));
+const userRoutes = require("./routes/users");
+app.use("/api/users", userRoutes);
 
-// PORT (USE PORT 4000)
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.log('MongoDB error:', err));
+
 const PORT = process.env.PORT || 4000;
-
 app.listen(PORT, () => {
   console.log(`Backend running on port ${PORT}`);
 });

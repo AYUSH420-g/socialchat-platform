@@ -1,3 +1,60 @@
-.home{
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+/* Full page layout - LEFT ALIGNED */
+.home-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;   /* LEFT aligned */
+  padding-left: 60px;
+  background-color: #000;    /* Instagram dark */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Heading */
+.home {
+  font-size: 62px;
+  font-weight: 600;
+  font-family: "Brush Script MT", cursive;
+  color: #fafafa;            /* Light text on dark */
+  margin-bottom: 30px;
+}
+
+/* Chat button */
+.home-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 22px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fafafa;
+  background: linear-gradient(
+    45deg,
+    #405de6,
+    #5851db,
+    #833ab4,
+    #c13584,
+    #e1306c
+  ); /* Instagram gradient */
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.2s ease;
+}
+
+/* Hover effect */
+.home-button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* Active */
+.home-button:active {
+  transform: scale(0.97);
+}
+
+/* Chat icon */
+.home-button span {
+  font-size: 18px;
 }

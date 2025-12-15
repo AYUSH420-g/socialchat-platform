@@ -4,7 +4,6 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
-// ---------------- SIGNUP ----------------
 router.post("/signup", async (req, res) => {
   const { fullName, username, email, password } = req.body;
 
@@ -13,11 +12,9 @@ router.post("/signup", async (req, res) => {
       return res.status(400).json({ message: "All fields required" });
     }
 
-    // CHECK EMAIL
     const emailExists = await User.findOne({ email });
     if (emailExists) return res.status(400).json({ message: "Email already in use" });
 
-    // CHECK USERNAME
     const usernameExists = await User.findOne({ username });
     if (usernameExists) return res.status(400).json({ message: "Username already taken" });
 
@@ -42,17 +39,14 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-// ---------------- LOGIN ----------------
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
 
-    // FIND USER BY EMAIL
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ message: "Invalid email or password" });
 
-    // CHECK PASSWORD
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: "Invalid email or password" });
 
