@@ -8,17 +8,43 @@
 
 /* LEFT */
 .chat-list {
-  width: 320px;
+  width: 400px;
   background-color: #000;
   border-right: 1px solid #262626;
+  display: flex;
+  flex-direction: column;
 }
 
-.chat-list-header {
-  padding: 16px;
-  font-weight: 600;
+.chat-list-search-container {
+  padding: 10px;
+  background: #111;
   border-bottom: 1px solid #262626;
 }
 
+.search-input-top {
+  width: 90%;
+  margin-bottom: 8px;
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: 16px;
+  border: 1px solid #333;
+  background: #2b3137;
+  color: #fff;
+  outline: none;
+}
+.search-input-top::placeholder{
+  
+  color: #fff;
+  
+}
+
+.chat-list-header {
+  font-weight: 600;
+  font-size: 18px;
+  padding: 6px 0;
+}
+
+/* Left user items */
 .chat-user {
   display: flex;
   align-items: center;
@@ -42,6 +68,12 @@
   border-radius: 50%;
 }
 
+.empty-chat {
+  padding: 20px;
+  text-align: center;
+  color: #777;
+}
+
 /* RIGHT */
 .chat-window {
   flex: 1;
@@ -52,6 +84,8 @@
 .chat-header {
   padding: 16px;
   border-bottom: 1px solid #262626;
+  font-weight: bold;
+  font-size: 18px;
 }
 
 .chat-box {
@@ -65,6 +99,7 @@
   padding: 10px 14px;
   margin-bottom: 8px;
   border-radius: 18px;
+  position: relative;
 }
 
 .message.sent {
@@ -74,6 +109,43 @@
 
 .message.received {
   background-color: #262626;
+}
+
+/* Reply preview in messages */
+.reply-preview {
+  background: rgba(202, 205, 206, 0.074);
+  border-left: 3px solid #262626;
+  padding: 6px 8px;
+  margin-bottom: 6px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.reply-user {
+  font-weight: 600;
+  font-size: 11px;
+  color: black;
+}
+
+.reply-icon {
+  position: absolute;
+  right: -24px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  cursor: pointer;
+}
+
+.message:hover .reply-icon {
+  opacity: 1;
+}
+
+.reply-box {
+  background: #222;
+  padding: 8px;
+  border-left: 3px solid #3797f0;
+  margin-bottom: 6px;
+  font-size: 13px;
 }
 
 .chat-input {
@@ -91,18 +163,12 @@
 }
 
 .chat-input button {
-  background-color: #3797f0;
+  background-color: #15020200;
   border: none;
   padding: 8px 14px;
   border-radius: 6px;
-  color: white;
+  color: #85a1ff;
+  font-weight: bold;
+  font-size: 15px;
   cursor: pointer;
-}
-
-.empty-chat {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #777;
 }

@@ -17,5 +17,25 @@ router.get("/", async (req, res) => {
     res.status(500).json({ message: "Failed to load users" });
   }
 });
+// SEARCH USERS BY USERNAME
+router.get("/search", async (req, res) => {
+  const { q } = req.query;
+
+  if (!q) return res.json([]);
+
+  try {
+    const users = await User.find(
+      {
+        username: { $regex: q, $options: "i" }
+      },
+      "_id username"
+    ).limit(10);
+
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ message: "Search failed" });
+  }
+});
+
 
 module.exports = router;

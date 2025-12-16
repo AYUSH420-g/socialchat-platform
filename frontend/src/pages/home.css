@@ -13,10 +13,10 @@
 
 /* Heading */
 .home {
-  font-size: 62px;
-  font-weight: 600;
+  font-size: 52px;
+  font-weight: 300;
   font-family: "Brush Script MT", cursive;
-  color: #fafafa;            /* Light text on dark */
+  color: #fafafa;            
   margin-bottom: 30px;
 }
 
