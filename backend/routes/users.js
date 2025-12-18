@@ -37,5 +37,33 @@ router.get("/search", async (req, res) => {
   }
 });
 
+router.put("/update-profile", async (req, res) => {
+  const { userId, fullName, bio } = req.body;
+
+  if (!userId) {
+    return res.status(400).json({ message: "User ID required" });
+  }
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { fullName, bio },
+      { new: true }
+    ).select("-password");
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({
+      message: "Profile updated successfully",
+      user: updatedUser
+    });
+
+  } catch (err) {
+    console.error("Update profile error:", err);
+    res.status(500).json({ message: "Update failed" });
+  }
+});
 
 module.exports = router;

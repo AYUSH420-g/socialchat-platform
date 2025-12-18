@@ -37,6 +37,42 @@
   color: #fff;
   
 }
+.message {
+  position: relative;
+}
+
+.delete-icon {
+  display: none;
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.message:hover .delete-icon {
+  display: block;
+}
+
+.delete-confirm {
+  background: #1a1a1a;
+  padding: 10px;
+  border-top: 1px solid #333;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.delete-confirm button {
+  padding: 6px 12px;
+  border: none;
+  cursor: pointer;
+}
+
+.delete-confirm button:first-child {
+  background: red;
+  color: white;
+}
 
 .chat-list-header {
   font-weight: 600;

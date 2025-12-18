@@ -13,6 +13,8 @@ function Chat() {
   const [replyMsg, setReplyMsg] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [deleteMsg, setDeleteMsg] = useState(null);
+
 
   // DEBUG
   useEffect(() => {
@@ -69,6 +71,19 @@ function Chat() {
       console.log("Load messages error:", err);
     }
   }
+  async function handleDelete(messageId) {
+  try {
+    await axios.delete(`/api/chat/message/${messageId}`, {
+      data: { senderId }
+    });
+
+    setDeleteMsg(null);
+    loadMessages(); // refresh chat
+
+  } catch (err) {
+    console.log("Delete error:", err.response?.data || err);
+  }
+}
 
   async function sendMsg() {
     if (!msg.trim() || !receiverId) return;
@@ -168,7 +183,10 @@ function Chat() {
                       <p>{m.replyTo.message}</p>
                     </div>
                   )}
+
                   <div className="message-text">{m.message}</div>
+
+                  {/* REPLY ICON */}
                   <span
                     className="reply-icon"
                     onClick={() =>
@@ -181,8 +199,19 @@ function Chat() {
                   >
                     ↩️
                   </span>
+
+                  {/* DELETE ICON (STEP 3) */}
+                  {String(m.senderId) === String(senderId) && (
+                    <span
+                      className="delete-icon"
+                      onClick={() => setDeleteMsg(m)}
+                    >
+                      🗑️
+                    </span>
+                  )}
                 </div>
               ))}
+
             </div>
 
             {replyMsg && (
@@ -192,6 +221,13 @@ function Chat() {
                 <button onClick={() => setReplyMsg(null)}>✕</button>
               </div>
             )}
+            {deleteMsg && (
+            <div className="delete-confirm">
+              <p>Delete this message?</p>
+              <button onClick={() => handleDelete(deleteMsg._id)}>Delete</button>
+              <button onClick={() => setDeleteMsg(null)}>Cancel</button>
+            </div>
+          )}
 
             <div className="chat-input">
               <input

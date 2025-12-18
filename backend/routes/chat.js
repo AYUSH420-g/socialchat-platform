@@ -43,6 +43,37 @@ router.post("/send", async (req, res) => {
 // =========================
 // GET CHAT HISTORY
 // =========================
+// DELETE MESSAGE (sender only)
+router.delete("/message/:messageId", async (req, res) => {
+  const { messageId } = req.params;
+  const { senderId } = req.body;
+
+  if (!mongoose.Types.ObjectId.isValid(messageId)) {
+    return res.status(400).json({ message: "Invalid message id" });
+  }
+
+  try {
+    const message = await Message.findById(messageId);
+
+    if (!message) {
+      return res.status(404).json({ message: "Message not found" });
+    }
+
+    // Authorization check
+    if (String(message.senderId) !== String(senderId)) {
+      return res.status(403).json({ message: "Not allowed to delete this message" });
+    }
+
+    await Message.findByIdAndDelete(messageId);
+
+    res.json({ message: "Message deleted successfully" });
+
+  } catch (err) {
+    console.error("Delete message error:", err);
+    res.status(500).json({ message: "Delete failed" });
+  }
+});
+
 router.get("/history/:senderId/:receiverId", async (req, res) => {
   const { senderId, receiverId } = req.params;
 

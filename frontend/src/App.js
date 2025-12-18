@@ -3,6 +3,8 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Home from './pages/home';
 import Chat from './pages/Chat';
+import Profile from './pages/profile';
+import Edit from './pages/Edit';
 // import UserList from './pages/UserList'; 
 
 function App() {
@@ -14,6 +16,8 @@ function App() {
         <Route path="/home" element={<Home />} />
         {/* <Route path="/users" element={<UserList />} /> */}
         <Route path="/chat/:receiverId" element={<Chat />} />
+         <Route path="/profile" element={<Profile />} />
+         <Route path="/Edit" element={<Edit />} />
       </Routes>
     </Router>
   );
