@@ -19,14 +19,19 @@ const messageSchema = new mongoose.Schema(
       required: true
     },
 
+    // 🔵 UNREAD / READ FLAG (IMPORTANT)
+    isSeen: {
+      type: Boolean,
+      default: false
+    },
+
+    // 🔁 REPLY INFO (OPTIONAL)
     replyTo: {
       _id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Message"
       },
-      message: {
-        type: String
-      },
+      message: String,
       senderId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
@@ -34,7 +39,7 @@ const messageSchema = new mongoose.Schema(
     }
   },
   {
-    timestamps: true 
+    timestamps: true
   }
 );
 

@@ -62,16 +62,6 @@ function Profile() {
                 }}
             >Edit Profile
             </button>
-
-            <button
-              className="logout-btn"
-              onClick={() => {
-                localStorage.clear();
-                navigate("/login");
-              }}
-            >
-              Logout
-            </button>
           </div>
         </div>
       </div>

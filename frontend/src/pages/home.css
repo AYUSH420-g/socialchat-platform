@@ -13,7 +13,7 @@
    LEFT PANEL
    =============================== */
 .home-left {
-  width: 250px;
+  width: 230px;
   padding: 40px 30px;
   border-right: 1px solid #262626;
   display: flex;
@@ -27,8 +27,14 @@
    =============================== */
 .home-right {
   flex: 1;
+  display: flex;
+  align-items: center;
+  padding-left: 300px;
   background-color: #000;
-}
+  color: #760c2f;
+  font-size: 50px;
+  font-family: monospace;
+  }
 
 /* ===============================
    HEADING
@@ -66,6 +72,48 @@
   cursor: pointer;
   text-align: left;
   transition: transform 0.15s ease, opacity 0.2s ease;
+}
+.home-logout {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #890303;
+  background-color: #170303;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 260px;
+  text-align: left;
+  transition: transform 0.15s ease, opacity 0.4s ease;
+}
+
+.home-button-hm{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fafafa;
+  background: linear-gradient(
+    45deg,
+    #405de6,
+    #5851db,
+    #833ab4,
+    #c13584,
+    #e1306c
+  );
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: left;
+  transition: transform 0.15s ease, opacity 0.2s ease;
+  opacity:0.49;
 }
 
 /* Hover */

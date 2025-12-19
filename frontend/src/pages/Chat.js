@@ -1,11 +1,20 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import "./Chat.css";
+import { formatLastSeen } from "../utils/time";
+import { useNavigate } from "react-router-dom";
 
 function Chat() {
+  // ===============================
+  // AUTH USER
+  // ===============================
   const user = JSON.parse(localStorage.getItem("user"));
   const senderId = user?.id || user?._id;
+  const navigate = useNavigate();
 
+  // ===============================
+  // STATE
+  // ===============================
   const [users, setUsers] = useState([]);
   const [receiverId, setReceiverId] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -14,31 +23,61 @@ function Chat() {
   const [searchText, setSearchText] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [deleteMsg, setDeleteMsg] = useState(null);
+  const [unreadMap, setUnreadMap] = useState({});
 
-
-  // DEBUG
-  useEffect(() => {
-    console.log("searchText:", searchText);
-    console.log("searchResults:", searchResults);
-  }, [searchResults]);
-
-  // LOAD USERS
+  // ===============================
+  // LOAD USERS (includes online + lastSeen)
+  // ===============================
   useEffect(() => {
     if (!senderId) return;
+
     axios
       .get(`/api/users?exclude=${senderId}`)
       .then((res) => setUsers(res.data))
       .catch((err) => console.log("Load users error:", err));
   }, [senderId]);
 
-  // LOAD MESSAGES WHEN SELECTED
+  // ===============================
+  // HEARTBEAT (STEP – ONLINE STATUS)
+  // ===============================
   useEffect(() => {
-    if (senderId && receiverId) {
-      loadMessages();
-    }
+    if (!senderId) return;
+
+    const interval = setInterval(() => {
+      axios.post("/api/users/heartbeat", { userId: senderId });
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [senderId]);
+
+  // ===============================
+  // UNREAD COUNT (BLUE DOT)
+  // ===============================
+  useEffect(() => {
+    if (!senderId) return;
+
+    axios
+      .get(`/api/users/unread?userId=${senderId}`)
+      .then((res) => {
+        const map = {};
+        res.data.forEach((item) => {
+          map[item._id] = item.count;
+        });
+        setUnreadMap(map);
+      })
+      .catch((err) => console.log("Unread error:", err));
+  }, [senderId, receiverId]);
+
+  // ===============================
+  // LOAD CHAT
+  // ===============================
+  useEffect(() => {
+    if (senderId && receiverId) loadMessages();
   }, [receiverId, senderId]);
 
-  // SEARCH USERS (debounced)
+  // ===============================
+  // SEARCH USERS
+  // ===============================
   useEffect(() => {
     if (searchText.trim().length < 2) {
       setSearchResults([]);
@@ -49,199 +88,222 @@ function Chat() {
       axios
         .get(`/api/users/search?q=${searchText}`)
         .then((res) => setSearchResults(res.data))
-        .catch((err) => console.log("Search error:", err));
+        .catch(() => {});
     }, 300);
 
     return () => clearTimeout(timer);
   }, [searchText]);
 
+  // ===============================
   // AUTO SCROLL
+  // ===============================
   useEffect(() => {
     const chatBox = document.querySelector(".chat-box");
     if (chatBox) chatBox.scrollTop = chatBox.scrollHeight;
   }, [messages]);
 
+  // ===============================
+  // API FUNCTIONS
+  // ===============================
   async function loadMessages() {
-    try {
-      const res = await axios.get(
-        `/api/chat/history/${senderId}/${receiverId}`
-      );
-      setMessages(res.data);
-    } catch (err) {
-      console.log("Load messages error:", err);
-    }
+    const res = await axios.get(
+      `/api/chat/history/${senderId}/${receiverId}`
+    );
+    setMessages(res.data);
   }
+
+  async function sendMsg() {
+    if (!msg.trim() || !receiverId) return;
+
+    await axios.post("/api/chat/send", {
+      senderId,
+      receiverId,
+      message: msg,
+      replyTo: replyMsg
+    });
+
+    setMsg("");
+    setReplyMsg(null);
+    loadMessages();
+  }
+
   async function handleDelete(messageId) {
-  try {
     await axios.delete(`/api/chat/message/${messageId}`, {
       data: { senderId }
     });
 
     setDeleteMsg(null);
-    loadMessages(); // refresh chat
-
-  } catch (err) {
-    console.log("Delete error:", err.response?.data || err);
-  }
-}
-
-  async function sendMsg() {
-    if (!msg.trim() || !receiverId) return;
-
-    try {
-      await axios.post("/api/chat/send", {
-        senderId,
-        receiverId,
-        message: msg,
-        replyTo: replyMsg,
-      });
-
-      setMsg("");
-      setReplyMsg(null);
-      loadMessages();
-    } catch (err) {
-      console.log("Send error:", err.response?.data || err);
-    }
+    loadMessages();
   }
 
-  if (!senderId) return <p>You must log in to chat.</p>;
+  if (!senderId) return <p>You must log in</p>;
 
   const displayedUsers =
     searchText.trim() === "" ? users : searchResults;
 
   const selectedUser = users.find((u) => u._id === receiverId);
+  console.log(users);
 
+  // ===============================
+  // UI
+  // ===============================
   return (
-    <div className="chat-layout">
+    <div className="page-container">
+      {/* ================= HOME LEFT PANEL ================= */}
+      <div className="home-left">
+        <h1 className="home">Chat With Us</h1>
 
-      {/* ================= LEFT SEARCH + USER LIST ================= */}
-      <div className="chat-list">
-        
-        {/* SEARCH INPUT + HEADER */}
-        <div className="chat-list-search-container">
+        <button className="chat-button" onClick={() => navigate("/home")}>
+          🏠 Home
+        </button>
+
+        <button className="chat-button-ch">
+          💬 Chat
+        </button>
+
+        <button className="chat-button" onClick={() => navigate("/profile")}>
+          👤 Profile
+        </button>
+
+        <button
+          className="home-logout"
+          onClick={async () => {
+            await axios.post("/api/users/logout", { userId: senderId });
+            localStorage.clear();
+            navigate("/login");
+          }}
+        >
+          Logout
+        </button>
+      </div>
+
+      {/* ================= CHAT SECTION ================= */}
+      <div className="chat-layout">
+        {/* LEFT CHAT LIST */}
+        <div className="chat-list">
           <input
-            type="text"
+            className="search-input-top"
             placeholder="Search"
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
-            className="search-input-top"
           />
-          <div className="chat-list-header">Messages</div>
+          <div className="msg">Messages</div>
+          {displayedUsers.map((u) => (
+            <div
+              key={u._id}
+              className={`chat-user ${receiverId === u._id ? "active" : ""}`}
+              onClick={() => {
+                setReceiverId(u._id);
+                setSearchText("");
+                setSearchResults([]);
+              }}
+            >
+              <div className="avatar">
+                {u.username.charAt(0).toUpperCase()}
+              </div>
+
+              <div className="user-info">
+                <span className="username">{u.username}</span>
+
+                {!u.isOnline && u.lastSeen && (
+                  <span className="last-seen">
+                    last seen {formatLastSeen(u.lastSeen)}
+                  </span>
+                )}
+              </div>
+
+
+              {unreadMap[u._id] && receiverId !== u._id && (
+                <span className="blue-dot"></span>
+              )}
+            </div>
+          ))}
         </div>
 
-        {displayedUsers.length === 0 && (
-          <div className="empty-chat">No users found</div>
-        )}
-
-        {displayedUsers.map((u) => (
-          <div
-            key={u._id}
-            className={`chat-user ${receiverId === u._id ? "active" : ""}`}
-            onClick={() => {
-              setReceiverId(u._id);
-              setSearchText("");
-              setSearchResults([]);
-            }}
-          >
-            <div className="avatar" />
-            <span>{u.username}</span>
-          </div>
-        ))}
-      </div>
-
-      {/* ================= RIGHT CHAT WINDOW ================= */}
-      <div className="chat-window">
-
-        {!receiverId ? (
-          <div className="empty-chat">Select a chat</div>
-        ) : (
-          <>
-            <div className="chat-header">
-              {selectedUser?.username || "Chat"}
-            </div>
-
-            <div className="chat-box">
-              {messages.length === 0 && (
-                <p className="empty-chat">No messages yet</p>
-              )}
-              {messages.map((m, i) => (
-                <div
-                  key={i}
-                  className={`message ${
-                    String(m.senderId) === String(senderId)
-                      ? "sent"
-                      : "received"
-                  }`}
-                >
-                  {m.replyTo && (
-                    <div className="reply-preview">
-                      <span className="reply-user">
-                        {String(m.replyTo.senderId) === String(senderId)
-                          ? "You"
-                          : selectedUser?.username}
-                      </span>
-                      <p>{m.replyTo.message}</p>
-                    </div>
-                  )}
-
-                  <div className="message-text">{m.message}</div>
-
-                  {/* REPLY ICON */}
-                  <span
-                    className="reply-icon"
-                    onClick={() =>
-                      setReplyMsg({
-                        _id: m._id,
-                        message: m.message,
-                        senderId: m.senderId,
-                      })
-                    }
-                  >
-                    ↩️
-                  </span>
-
-                  {/* DELETE ICON (STEP 3) */}
-                  {String(m.senderId) === String(senderId) && (
-                    <span
-                      className="delete-icon"
-                      onClick={() => setDeleteMsg(m)}
-                    >
-                      🗑️
-                    </span>
-                  )}
-                </div>
-              ))}
-
-            </div>
-
-            {replyMsg && (
-              <div className="reply-box">
-                <span>Replying to:</span>
-                <p>{replyMsg.message}</p>
-                <button onClick={() => setReplyMsg(null)}>✕</button>
+        {/* RIGHT CHAT WINDOW */}
+        <div className="chat-window">
+          {!receiverId ? (
+            <div className="empty-chat">Select a chat</div>
+          ) : (
+            <>
+              <div className="chat-header">
+                {selectedUser?.username}
+                {selectedUser?.isOnline && (
+                  <span className="online-dot">● Online</span>
+                )}
               </div>
-            )}
-            {deleteMsg && (
-            <div className="delete-confirm">
-              <p>Delete this message?</p>
-              <button onClick={() => handleDelete(deleteMsg._id)}>Delete</button>
-              <button onClick={() => setDeleteMsg(null)}>Cancel</button>
-            </div>
-          )}
 
-            <div className="chat-input">
-              <input
-                value={msg}
-                onChange={(e) => setMsg(e.target.value)}
-                placeholder="Message..."
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") sendMsg();
-                }}
-              />
-              <button onClick={sendMsg}>Send</button>
-            </div>
-          </>
-        )}
+              <div className="chat-box">
+                {messages.map((m) => (
+                  <div
+                    key={m._id}
+                    className={`message ${
+                      String(m.senderId) === String(senderId)
+                        ? "sent"
+                        : "received"
+                    }`}
+                  >
+                    {m.replyTo && (
+                      <div className="reply-preview">
+                        {m.replyTo.message}
+                      </div>
+                    )}
+
+                    {m.message}
+
+                    <span
+                      className="reply-icon"
+                      onClick={() =>
+                        setReplyMsg({
+                          _id: m._id,
+                          message: m.message,
+                          senderId: m.senderId
+                        })
+                      }
+                    >
+                      ↩️
+                    </span>
+
+                    {String(m.senderId) === String(senderId) && (
+                      <span
+                        className="delete-icon"
+                        onClick={() => setDeleteMsg(m)}
+                      >
+                        🗑️
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {replyMsg && (
+                <div className="reply-box">
+                  {replyMsg.message}
+                  <button onClick={() => setReplyMsg(null)}>✕</button>
+                </div>
+              )}
+
+              {deleteMsg && (
+                <div className="delete-confirm">
+                  <button onClick={() => handleDelete(deleteMsg._id)}>
+                    Delete
+                  </button>
+                  <button onClick={() => setDeleteMsg(null)}>Cancel</button>
+                </div>
+              )}
+
+              <div className="chat-input">
+                <input
+                  value={msg}
+                  onChange={(e) => setMsg(e.target.value)}
+                  placeholder="Message..."
+                  onKeyDown={(e) => e.key === "Enter" && sendMsg()}
+                />
+                <button onClick={sendMsg}>Send</button>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

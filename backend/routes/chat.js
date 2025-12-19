@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const Message = require("../models/Message");
+const User = require("../models/User");
 
 router.post("/send", async (req, res) => {
   const { senderId, receiverId, message, replyTo } = req.body || {};
@@ -28,7 +29,8 @@ router.post("/send", async (req, res) => {
       senderId: sender,
       receiverId: receiver,
       message,
-      replyTo: replyTo || null
+      replyTo: replyTo || null,
+      isSeen: false
     });
 
     console.log("Message sent:", msg._id);
@@ -77,6 +79,7 @@ router.delete("/message/:messageId", async (req, res) => {
 router.get("/history/:senderId/:receiverId", async (req, res) => {
   const { senderId, receiverId } = req.params;
 
+  // 1️⃣ Validate ObjectIds
   if (
     !mongoose.Types.ObjectId.isValid(senderId) ||
     !mongoose.Types.ObjectId.isValid(receiverId)
@@ -85,6 +88,24 @@ router.get("/history/:senderId/:receiverId", async (req, res) => {
   }
 
   try {
+    // 2️⃣ MARK MESSAGES AS SEEN (STEP 3)
+    await Message.updateMany(
+      {
+        senderId: receiverId,   // messages SENT BY the other user
+        receiverId: senderId,   // messages RECEIVED BY me
+        isSeen: false           // only unread messages
+      },
+      {
+        $set: { isSeen: true }  // mark them as seen
+      }
+    );
+    await User.findByIdAndUpdate(senderId, {
+      lastSeen: new Date(),
+      isOnline: true
+    });
+
+
+    // 3️⃣ FETCH CHAT HISTORY
     const msgs = await Message.find({
       $or: [
         { senderId, receiverId },
@@ -92,11 +113,14 @@ router.get("/history/:senderId/:receiverId", async (req, res) => {
       ]
     }).sort({ createdAt: 1 });
 
+    // 4️⃣ SEND RESPONSE
     res.json(msgs);
+
   } catch (err) {
     console.error("Load chat error:", err);
     res.status(500).json({ message: "Load chat failed" });
   }
 });
+
 
 module.exports = router;
