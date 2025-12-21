@@ -5,7 +5,7 @@ import Home from './pages/home';
 import Chat from './pages/Chat';
 import Profile from './pages/profile';
 import Edit from './pages/Edit';
-// import UserList from './pages/UserList'; 
+import Otherprofile from './pages/otherprofile';
 
 function App() {
   return (
@@ -18,6 +18,7 @@ function App() {
         <Route path="/chat/:receiverId" element={<Chat />} />
          <Route path="/profile" element={<Profile />} />
          <Route path="/Edit" element={<Edit />} />
+         <Route path="/otherprofile/:userId" element={<Otherprofile />} />
       </Routes>
     </Router>
   );

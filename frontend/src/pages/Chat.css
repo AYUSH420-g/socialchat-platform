@@ -193,7 +193,11 @@
   font-weight: 600;
   font-size: 18px;
 }
-
+.header-btn{
+  color: whitesmoke;
+  
+  background-color: #1a1a1a;
+}
 /* Messages */
 .chat-box {
   flex: 1;

@@ -227,7 +227,11 @@ function Chat() {
           ) : (
             <>
               <div className="chat-header">
-                {selectedUser?.username}
+                <button onClick={()=>navigate(`/otherprofile/${selectedUser._id}`)}
+                className="header-btn">
+                  {selectedUser?.username}
+                  </button>
+
                 {selectedUser?.isOnline && (
                   <span className="online-dot">● Online</span>
                 )}

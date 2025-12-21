@@ -5,11 +5,9 @@ const mongoose = require("mongoose");
 const User = require("../models/User");
 const Message = require("../models/Message");
 
-/**
- * ===============================
- * GET ALL USERS (except current user)
- * ===============================
- */
+/* =====================================================
+   GET ALL USERS (EXCEPT CURRENT USER)
+   ===================================================== */
 router.get("/", async (req, res) => {
   const { exclude } = req.query;
 
@@ -20,7 +18,7 @@ router.get("/", async (req, res) => {
   try {
     const users = await User.find(
       { _id: { $ne: exclude } },
-      "_id username fullName isOnline lastSeen"
+      "_id username fullName bio isOnline lastSeen"
     );
 
     res.json(users);
@@ -30,11 +28,9 @@ router.get("/", async (req, res) => {
   }
 });
 
-/**
- * ===============================
- * SEARCH USERS BY USERNAME
- * ===============================
- */
+/* =====================================================
+   SEARCH USERS BY USERNAME
+   ===================================================== */
 router.get("/search", async (req, res) => {
   const { q } = req.query;
 
@@ -43,7 +39,7 @@ router.get("/search", async (req, res) => {
   try {
     const users = await User.find(
       { username: { $regex: q, $options: "i" } },
-      "_id username"
+      "_id username isOnline lastSeen"
     ).limit(10);
 
     res.json(users);
@@ -53,6 +49,42 @@ router.get("/search", async (req, res) => {
   }
 });
 
+/* =====================================================
+   UNREAD MESSAGE COUNT (BLUE DOT)
+   ===================================================== */
+router.get("/unread", async (req, res) => {
+  const { userId } = req.query;
+
+  if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+    return res.status(400).json({ message: "Invalid user id" });
+  }
+
+  try {
+    const unread = await Message.aggregate([
+      {
+        $match: {
+          receiverId: new mongoose.Types.ObjectId(userId),
+          isSeen: false
+        }
+      },
+      {
+        $group: {
+          _id: "$senderId",
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+    res.json(unread);
+  } catch (err) {
+    console.error("Unread fetch error:", err);
+    res.status(500).json({ message: "Unread fetch failed" });
+  }
+});
+
+/* =====================================================
+   LOGOUT (SET OFFLINE + LAST SEEN)
+   ===================================================== */
 router.post("/logout", async (req, res) => {
   const { userId } = req.body;
 
@@ -65,10 +97,12 @@ router.post("/logout", async (req, res) => {
     lastSeen: new Date()
   });
 
-  res.json({ message: "Logged out" });
+  res.json({ message: "Logged out successfully" });
 });
 
-
+/* =====================================================
+   HEARTBEAT (ONLINE STATUS)
+   ===================================================== */
 router.post("/heartbeat", async (req, res) => {
   const { userId } = req.body;
 
@@ -84,19 +118,25 @@ router.post("/heartbeat", async (req, res) => {
   res.json({ success: true });
 });
 
+/* =====================================================
+   GET USER STATUS (ONLINE / LAST SEEN)
+   ===================================================== */
 router.get("/status/:userId", async (req, res) => {
-  const user = await User.findById(req.params.userId)
+  const { userId } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    return res.status(400).json({ message: "Invalid user id" });
+  }
+
+  const user = await User.findById(userId)
     .select("isOnline lastSeen");
 
   res.json(user);
 });
 
-
-/**
- * ===============================
- * UPDATE PROFILE
- * ===============================
- */
+/* =====================================================
+   UPDATE PROFILE
+   ===================================================== */
 router.put("/update-profile", async (req, res) => {
   const { userId, fullName, bio } = req.body;
 
@@ -125,34 +165,29 @@ router.put("/update-profile", async (req, res) => {
   }
 });
 
+/* =====================================================
+   GET USER BY ID (⚠️ MUST BE LAST)
+   ===================================================== */
+router.get("/:userId", async (req, res) => {
+  const { userId } = req.params;
 
-router.get("/unread", async (req, res) => {
-  const { userId } = req.query;
-
-  if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
     return res.status(400).json({ message: "Invalid user id" });
   }
 
   try {
-    const unread = await Message.aggregate([
-      {
-        $match: {
-          receiverId: new mongoose.Types.ObjectId(userId),
-          isSeen: false
-        }
-      },
-      {
-        $group: {
-          _id: "$senderId",
-          count: { $sum: 1 }
-        }
-      }
-    ]);
+    const user = await User.findById(userId).select(
+      "_id username fullName bio isOnline lastSeen"
+    );
 
-    res.json(unread);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(user);
   } catch (err) {
-    console.error("Unread fetch error:", err);
-    res.status(500).json({ message: "Unread fetch failed" });
+    console.error("Get user by id error:", err);
+    res.status(500).json({ message: "Failed to fetch user" });
   }
 });
 
