@@ -1,6 +1,4 @@
-/* ===============================
-   MAIN LAYOUT
-   =============================== */
+
 .profile-container {
   height: 100vh;
   display: flex;
@@ -9,17 +7,6 @@
     Roboto, Helvetica, Arial, sans-serif;
 }
 
-/* ===============================
-   LEFT PANEL
-   =============================== */
-.profile-left {
-  width: 230px;
-  padding: 40px 30px;
-  border-right: 1px solid #262626;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
 
 .home {
   font-size: 48px;
@@ -35,17 +22,9 @@
   align-items: center;
   gap: 10px;
   padding: 12px 18px;
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 500;
   color: #fafafa;
-  background: linear-gradient(
-    45deg,
-    #405de6,
-    #5851db,
-    #833ab4,
-    #c13584,
-    #e1306c
-  );
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -59,23 +38,16 @@
   align-items: center;
   gap: 10px;
   padding: 12px 18px;
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 23px;
+  font-weight: 750;
   color: #fafafa;
-  background: linear-gradient(
-    45deg,
-    #405de6,
-    #5851db,
-    #833ab4,
-    #c13584,
-    #e1306c
-  );
+  background-color: rgb(11 16 20);
   border: none;
   border-radius: 10px;
   cursor: pointer;
   text-align: left;
   transition: transform 0.15s ease, opacity 0.2s ease;
-  opacity:0.45;
+  /* opacity:0.45; */
 }
 
 .home-button:hover {
@@ -87,20 +59,19 @@
   font-size: 18px;
 }
 
-/* ===============================
-   RIGHT PANEL (PROFESSIONAL PROFILE)
-   =============================== */
+
 .profile-right {
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: rgb(11 16 20);
 }
 
 /* Profile card */
 .profile-card {
   width: 420px;
-  background-color: #121212;
+  background-color: #000;
   border: 1px solid #262626;
   border-radius: 14px;
   padding: 40px 30px;

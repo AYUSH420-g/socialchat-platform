@@ -17,7 +17,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #121212; 
+  background-color: rgb(11 16 20); 
   overflow: hidden;
 }
 
@@ -35,22 +35,21 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #121212;
+  background-color: rgb(11 16 20);
   padding: 40px;
 }
 
 .login-box {
   width: 100%;
   max-width: 360px;
-  background-color: #121212;
+  background-color: rgb(11 16 20);
   padding: 35px 30px;
   border-radius: 12px;
-  /* box-shadow: 0 0 0 1px #262626, 0 6px 15px rgba(0, 0, 0, 0.4); */
 }
 
 .login-title {
   text-align: center;
-  font-size: 38px;
+  font-size: 50px;
   font-family: "Brush Script MT", cursive;
   color: #ffffff;
   margin-bottom: 30px;
@@ -97,7 +96,6 @@ body {
   background-color: #3f4bd8;
 }
 
-/* === Footer === */
 .login-footer {
   margin-top: 20px;
   text-align: center;
@@ -115,7 +113,13 @@ body {
   text-decoration: underline;
 }
 
-/* === Responsive Design === */
+.log-signup{
+  color: #708DFF;
+  text-decoration: none;
+  font-family:inherit;
+  font-weight: 700;
+}
+
 @media (max-width: 900px) {
   .login-page-container {
     flex-direction: column;

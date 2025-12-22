@@ -26,7 +26,7 @@ function Chat() {
   const [unreadMap, setUnreadMap] = useState({});
 
   // ===============================
-  // LOAD USERS (includes online + lastSeen)
+  // LOAD USERS
   // ===============================
   useEffect(() => {
     if (!senderId) return;
@@ -34,11 +34,11 @@ function Chat() {
     axios
       .get(`/api/users?exclude=${senderId}`)
       .then((res) => setUsers(res.data))
-      .catch((err) => console.log("Load users error:", err));
+      .catch(console.error);
   }, [senderId]);
 
   // ===============================
-  // HEARTBEAT (STEP – ONLINE STATUS)
+  // HEARTBEAT (ONLINE STATUS)
   // ===============================
   useEffect(() => {
     if (!senderId) return;
@@ -51,7 +51,7 @@ function Chat() {
   }, [senderId]);
 
   // ===============================
-  // UNREAD COUNT (BLUE DOT)
+  // UNREAD COUNT
   // ===============================
   useEffect(() => {
     if (!senderId) return;
@@ -65,7 +65,7 @@ function Chat() {
         });
         setUnreadMap(map);
       })
-      .catch((err) => console.log("Unread error:", err));
+      .catch(console.error);
   }, [senderId, receiverId]);
 
   // ===============================
@@ -87,8 +87,7 @@ function Chat() {
     const timer = setTimeout(() => {
       axios
         .get(`/api/users/search?q=${searchText}`)
-        .then((res) => setSearchResults(res.data))
-        .catch(() => {});
+        .then((res) => setSearchResults(res.data));
     }, 300);
 
     return () => clearTimeout(timer);
@@ -142,14 +141,13 @@ function Chat() {
     searchText.trim() === "" ? users : searchResults;
 
   const selectedUser = users.find((u) => u._id === receiverId);
-  console.log(users);
 
   // ===============================
   // UI
   // ===============================
   return (
     <div className="page-container">
-      {/* ================= HOME LEFT PANEL ================= */}
+      {/* LEFT PANEL */}
       <div className="home-left">
         <h1 className="home">Chat With Us</h1>
 
@@ -157,9 +155,7 @@ function Chat() {
           🏠 Home
         </button>
 
-        <button className="chat-button-ch">
-          💬 Chat
-        </button>
+        <button className="chat-button-ch">💬 Messages</button>
 
         <button className="chat-button" onClick={() => navigate("/profile")}>
           👤 Profile
@@ -177,17 +173,20 @@ function Chat() {
         </button>
       </div>
 
-      {/* ================= CHAT SECTION ================= */}
+      {/* CHAT */}
       <div className="chat-layout">
-        {/* LEFT CHAT LIST */}
         <div className="chat-list">
+          <span className="current-username">{user?.username}</span>
+
           <input
             className="search-input-top"
             placeholder="Search"
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
           />
+
           <div className="msg">Messages</div>
+
           {displayedUsers.map((u) => (
             <div
               key={u._id}
@@ -204,14 +203,12 @@ function Chat() {
 
               <div className="user-info">
                 <span className="username">{u.username}</span>
-
                 {!u.isOnline && u.lastSeen && (
                   <span className="last-seen">
                     last seen {formatLastSeen(u.lastSeen)}
                   </span>
                 )}
               </div>
-
 
               {unreadMap[u._id] && receiverId !== u._id && (
                 <span className="blue-dot"></span>
@@ -220,20 +217,23 @@ function Chat() {
           ))}
         </div>
 
-        {/* RIGHT CHAT WINDOW */}
         <div className="chat-window">
           {!receiverId ? (
             <div className="empty-chat">Select a chat</div>
           ) : (
             <>
               <div className="chat-header">
-                <button onClick={()=>navigate(`/otherprofile/${selectedUser._id}`)}
-                className="header-btn">
+                <button
+                  className="header-btn"
+                  onClick={() =>
+                    navigate(`/otherprofile/${selectedUser._id}`)
+                  }
+                >
                   {selectedUser?.username}
-                  </button>
+                </button>
 
                 {selectedUser?.isOnline && (
-                  <span className="online-dot">● Online</span>
+                  <span className="online-dot"> ● Online</span>
                 )}
               </div>
 
@@ -298,6 +298,7 @@ function Chat() {
 
               <div className="chat-input">
                 <input
+                  className="input-msg"
                   value={msg}
                   onChange={(e) => setMsg(e.target.value)}
                   placeholder="Message..."

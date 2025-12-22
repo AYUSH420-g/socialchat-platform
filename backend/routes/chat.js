@@ -14,7 +14,6 @@ router.post("/send", async (req, res) => {
   const sender = String(senderId).trim();
   const receiver = String(receiverId).trim();
 
-  // 2️⃣ Validate ObjectIds
   if (!mongoose.Types.ObjectId.isValid(sender)) {
     return res.status(400).json({ message: "Invalid sender id" });
   }
@@ -24,7 +23,6 @@ router.post("/send", async (req, res) => {
   }
 
   try {
-    // 3️⃣ Create message with optional reply
     const msg = await Message.create({
       senderId: sender,
       receiverId: receiver,
@@ -42,10 +40,7 @@ router.post("/send", async (req, res) => {
   }
 });
 
-// =========================
-// GET CHAT HISTORY
-// =========================
-// DELETE MESSAGE (sender only)
+
 router.delete("/message/:messageId", async (req, res) => {
   const { messageId } = req.params;
   const { senderId } = req.body;

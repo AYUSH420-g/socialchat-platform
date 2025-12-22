@@ -39,7 +39,7 @@ function Otherpofile() {
           className="home-button"
           onClick={() => navigate("/chat/:receiverId")}
         >
-          <span>💬</span> Chat
+          <span>💬</span> Messages
         </button>
 
         <button
@@ -63,7 +63,7 @@ function Otherpofile() {
             <h2 className="profile-username">{profile.username}</h2> 
             <p className="profile-fullname">{profile.fullName}</p> 
             <p className="profile-bio">
-              {profile.bio || "No bio added yet."}
+              {profile.bio}
             </p>
           </div>
 

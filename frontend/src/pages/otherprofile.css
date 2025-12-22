@@ -1,6 +1,4 @@
-/* ===============================
-   MAIN LAYOUT
-   =============================== */
+
 .profile-container {
   height: 100vh;
   display: flex;
@@ -13,16 +11,17 @@
    LEFT PANEL
    =============================== */
 .profile-left {
-  width: 230px;
+  width: 160px;
   padding: 40px 30px;
-  border-right: 1px solid #262626;
+  border-right: 1px solid rgb(31,32,32);
+  background-color: rgb(11 16 20);
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
 .home {
-  font-size: 48px;
+  font-size: 34px;
   font-weight: 300;
   font-family: "Brush Script MT", cursive;
   color: #fafafa;
@@ -35,17 +34,18 @@
   align-items: center;
   gap: 10px;
   padding: 12px 18px;
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
+  background-color: rgb(11 16 20);
   color: #fafafa;
-  background: linear-gradient(
+  /* background: linear-gradient(
     45deg,
     #405de6,
     #5851db,
     #833ab4,
     #c13584,
     #e1306c
-  );
+  ); */
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -68,6 +68,7 @@
 .profile-right {
   flex: 1;
   display: flex;
+  background-color: rgb(11 16 20);
   justify-content: center;
   align-items: center;
 }
@@ -75,8 +76,8 @@
 /* Profile card */
 .profile-card {
   width: 420px;
-  background-color: #121212;
-  border: 1px solid #262626;
+  background-color: rgb(11 16 20);
+  border: 1px solid rgb(11 16 20);
   border-radius: 14px;
   padding: 40px 30px;
   text-align: center;
@@ -104,14 +105,14 @@
 
 /* User info */
 .profile-username {
-  font-size: 22px;
-  font-weight: 600;
+  font-size: 30px;
+  font-weight: 700;
   color: #fafafa;
 }
 
 .profile-fullname {
   font-size: 15px;
-  color: #bdbdbd;
+  color: #cecccc;
   margin: 6px 0 12px;
 }
 

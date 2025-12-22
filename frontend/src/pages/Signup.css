@@ -6,29 +6,34 @@ body {
   color: #fff;
 }
 
-/* Centered layout */
 .signup-page {
   display: flex;
   justify-content: center;
+  background-color: rgb(11 16 20);
   align-items: center;
   height: 100vh;
 }
 
-/* Box */
+.sign-login{
+  color: #708DFF;
+  text-decoration: none;
+  font-family:inherit;
+  font-weight: 700;
+}
+
 .signup-box {
-  background-color: #121212;
+  background-color: rgb(11 16 20);
   border: 1px solid #262626;
   border-radius: 8px;
   padding: 40px;
   width: 350px;
-  /* height:90vh; */
   text-align: center;
 }
 
 /* Title */
 .signup-title {
   font-family: "Brush Script MT", cursive;
-  font-size: 42px;
+  font-size: 60px;
   color: #fff;
   margin-bottom: 15px;
 }
@@ -40,7 +45,6 @@ body {
   margin-bottom: 20px;
 }
 
-/* Facebook button */
 .facebook-btn {
   width: 100%;
   background-color: #385185;
@@ -93,14 +97,12 @@ form input:focus {
   border-color: #4f5bd5;
 }
 
-/* Error text */
 .error {
   color: #f44336;
   font-size: 13px;
   margin-bottom: 10px;
 }
 
-/* Info text */
 .info-text {
   font-size: 12px;
   color: #aaa;

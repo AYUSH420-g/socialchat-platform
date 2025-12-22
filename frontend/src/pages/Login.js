@@ -18,12 +18,10 @@ function Login() {
       // CALL BACKEND 
       const res = await axios.post("/api/auth/login", { email, password });
 
-      // SAVE TOKEN IN LOCAL STORAGE
       localStorage.setItem("token", res.data.token);
 
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
-      // REDIRECT TO HOME PAGE (YOU CAN CHANGE IT)
       navigate("/home");
 
     } catch (err) {
@@ -52,7 +50,7 @@ function Login() {
               value={email}
               onChange={e => setEmail(e.target.value)}
               required
-              placeholder="Phone number, username, or email"
+              placeholder="Email address"
             />
 
             <input
@@ -69,7 +67,8 @@ function Login() {
           </form>
 
           <div className="login-footer">
-            Don’t have an account? <span>Sign up</span>
+            Don’t have an account? <a className="log-signup"
+            href='/Signup'>Sign up</a>
           </div>
         </div>
       </div>

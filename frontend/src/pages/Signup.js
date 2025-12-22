@@ -1,7 +1,7 @@
 // Signup.js
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { href, useNavigate } from "react-router-dom";
 import "./Signup.css";
 
 function Signup() {
@@ -26,7 +26,7 @@ function Signup() {
     setError("");
     setLoading(true);
     try {
-      // prepare payload that matches backend expectation
+
       const payload = {
         fullName,
         username,
@@ -53,11 +53,15 @@ function Signup() {
     <div className="signup-page">
       <div className="signup-box">
         <h1 className="signup-title">Chat With Us</h1>
-        <p className="signup-subtitle">
-          Sign up to see photos and videos from your friends.
-        </p>
 
-        <button className="facebook-btn" type="button">Log in with Facebook</button>
+        <div>
+          <span>Have an account?</span>
+          <br></br>
+            <a className="sign-login"
+              href="/Login">Log in
+            </a>
+
+        </div>
         <div className="or-line">
           <span>OR</span>
         </div>
@@ -65,17 +69,9 @@ function Signup() {
         <form onSubmit={handleSubmit}>
           <input
             type="email"
-            placeholder="Mobile number or email address"
+            placeholder="Email address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
             required
           />
 
@@ -97,6 +93,14 @@ function Signup() {
 
           <input
             type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+
+          <input
+            type="password"
             placeholder="Confirm Password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
@@ -106,8 +110,7 @@ function Signup() {
           {error && <p className="error">{error}</p>}
 
           <p className="info-text">
-            People who use our service may have uploaded your contact
-            information to Instagram.{" "}
+            This is just a sentence for making this page's feel more real. {" "}
             <a href="#" className="link">
               Learn more
             </a>

@@ -40,7 +40,7 @@ function Home() {
           className="home-button"
           onClick={() => navigate("/chat/:receiverId")}
         >
-          <span>💬</span> Chat
+          <span>💬</span> Messages
         </button>
 
         <button
@@ -58,10 +58,43 @@ function Home() {
         </button>
       </div>
 
-      {/* RIGHT PANEL (EMPTY FOR NOW) */}
-      <div className="home-right">welcome to feed.
-        {/* Future content goes here */}
-      </div>
+      <div className="home-right">
+        <div className="feed-grid feed-grid-6">
+        
+          <div className="feed-card">
+            <h3>Start Chatting 💬</h3>
+            <p>Connect instantly with users and start real-time conversations.</p>
+          </div>
+
+          <div className="feed-card">
+            <h3>Unread Messages 🔵</h3>
+            <p>Blue dot shows unread messages so you never miss a chat.</p>
+          </div>
+
+          <div className="feed-card">
+            <h3>Online Status 🟢</h3>
+            <p>See who is online and available to chat in real time.</p>
+          </div>
+
+          <div className="feed-card">
+            <h3>Last Seen ⏱️</h3>
+            <p>Know when a user was last active if they’re offline.</p>
+          </div>
+
+          <div className="feed-card">
+            <h3>Reply to Messages ↩️</h3>
+            <p>Reply to specific messages for clearer conversations.</p>
+          </div>
+
+          <div className="feed-card">
+            <h3>Secure Account 🔐</h3>
+            <p>Your account stays secure with login and session handling.</p>
+          </div>
+
+        </div>
+      </div>  
+
+
     </div>
   );
 }

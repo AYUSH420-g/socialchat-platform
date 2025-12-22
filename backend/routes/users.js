@@ -5,9 +5,7 @@ const mongoose = require("mongoose");
 const User = require("../models/User");
 const Message = require("../models/Message");
 
-/* =====================================================
-   GET ALL USERS (EXCEPT CURRENT USER)
-   ===================================================== */
+
 router.get("/", async (req, res) => {
   const { exclude } = req.query;
 
@@ -28,9 +26,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-/* =====================================================
-   SEARCH USERS BY USERNAME
-   ===================================================== */
+
 router.get("/search", async (req, res) => {
   const { q } = req.query;
 
@@ -49,9 +45,7 @@ router.get("/search", async (req, res) => {
   }
 });
 
-/* =====================================================
-   UNREAD MESSAGE COUNT (BLUE DOT)
-   ===================================================== */
+
 router.get("/unread", async (req, res) => {
   const { userId } = req.query;
 
@@ -82,9 +76,7 @@ router.get("/unread", async (req, res) => {
   }
 });
 
-/* =====================================================
-   LOGOUT (SET OFFLINE + LAST SEEN)
-   ===================================================== */
+
 router.post("/logout", async (req, res) => {
   const { userId } = req.body;
 
@@ -100,9 +92,26 @@ router.post("/logout", async (req, res) => {
   res.json({ message: "Logged out successfully" });
 });
 
-/* =====================================================
-   HEARTBEAT (ONLINE STATUS)
-   ===================================================== */
+// GET USER BY USERNAME
+router.get("/by-username/:username", async (req, res) => {
+  const { username } = req.params;
+
+  try {
+    const user = await User.findOne({ username })
+      .select("_id username fullName bio");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(user);
+  } catch (err) {
+    console.error("Fetch user by username error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
 router.post("/heartbeat", async (req, res) => {
   const { userId } = req.body;
 
@@ -118,9 +127,7 @@ router.post("/heartbeat", async (req, res) => {
   res.json({ success: true });
 });
 
-/* =====================================================
-   GET USER STATUS (ONLINE / LAST SEEN)
-   ===================================================== */
+
 router.get("/status/:userId", async (req, res) => {
   const { userId } = req.params;
 
@@ -134,9 +141,7 @@ router.get("/status/:userId", async (req, res) => {
   res.json(user);
 });
 
-/* =====================================================
-   UPDATE PROFILE
-   ===================================================== */
+
 router.put("/update-profile", async (req, res) => {
   const { userId, fullName, bio } = req.body;
 
@@ -165,9 +170,7 @@ router.put("/update-profile", async (req, res) => {
   }
 });
 
-/* =====================================================
-   GET USER BY ID (⚠️ MUST BE LAST)
-   ===================================================== */
+
 router.get("/:userId", async (req, res) => {
   const { userId } = req.params;
 
